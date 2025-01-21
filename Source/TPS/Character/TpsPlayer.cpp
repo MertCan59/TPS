@@ -31,9 +31,15 @@ ATpsPlayer::ATpsPlayer()
 void ATpsPlayer::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
-	CameraBoom->TargetArmLength=this->TargetArmLength;
-	CameraBoom->TargetOffset=FVector(0.0f,0.0f,CameraHeight);
 }
+
+void ATpsPlayer::PostInitProperties()
+{
+	Super::PostInitProperties();
+	CameraBoom->TargetArmLength=this->TargetArmLength;
+	CameraBoom->TargetOffset=FVector(0.0f,CameraYOffset,CameraHeight);
+}
+
 // Called when the game starts or when spawned
 void ATpsPlayer::BeginPlay()
 {

@@ -19,9 +19,10 @@ class TPS_API ATpsPlayer : public APawn
 
 public:
 	ATpsPlayer();
-	virtual void OnConstruction(const FTransform& Transform)override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void OnConstruction(const FTransform& Transform)override;
+	virtual void PostInitProperties() override;
 
 protected:
 
@@ -50,8 +51,13 @@ private:
 private:
 	UPROPERTY(EditAnywhere,Category="Camera Properties")
 	float CameraHeight;
-
+	
+	UPROPERTY(EditAnywhere,Category="Camera Properties")
+	float CameraYOffset ;
+	
 	UPROPERTY(EditAnywhere,Category="Camera Properties")
 	float TargetArmLength;
+
+	
 };
 	
