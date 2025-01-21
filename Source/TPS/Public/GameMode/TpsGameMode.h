@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "BaseGameMode.generated.h"
+#include "TpsGameMode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPS_API ABaseGameMode : public AGameModeBase
+class TPS_API ATpsGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	

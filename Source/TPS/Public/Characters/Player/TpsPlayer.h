@@ -3,51 +3,64 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/Character.h"
+#include "TPS/Public/Controller/PlayerDefaultController.h"
+
 #include "TpsPlayer.generated.h"
 
-class UCapsuleComponent;
 class USceneComponent;
-class USkeletalMeshComponent;
 class USpringArmComponent;
 class UCameraComponent;
+class UCapsuleComponent;
+class UMovement;
+
+struct FInputActionValue;
 
 UCLASS()
-class TPS_API ATpsPlayer : public APawn
+class TPS_API ATpsPlayer : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
+	// Sets default values for this character's properties
 	ATpsPlayer();
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void OnConstruction(const FTransform& Transform)override;
 	virtual void PostInitProperties() override;
+	
+	void Move(const FInputActionValue& Value);
 
+	
 protected:
-
+	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+public:	
 
 //For Components
 private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,Category="Components")
 	USceneComponent* PlayerRootComponent;
 
-	UPROPERTY(VisibleAnywhere)
-	USkeletalMeshComponent* PlayerSkeletalMesh;
-
-	UPROPERTY(VisibleAnywhere)
-	UCapsuleComponent* PlayerCapsuleCollider;
+	UPROPERTY(VisibleAnywhere,Category="Components")
+	UCapsuleComponent* PlayerCapsule;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Components")
+	UMovement* MovementController;
+	
+	UPROPERTY(VisibleAnywhere,Category="Camera")
 	USpringArmComponent* CameraBoom;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,Category="Camera")
 	UCameraComponent* ViewCamera;
 	
-//For polishing variables such as length, height
+	UPROPERTY(EditAnywhere,Category="Input Controller")
+	APlayerDefaultController* PlayerDefaultController;
+
+	
+	
+	//For polishing variables such as length, height
 private:
 	UPROPERTY(EditAnywhere,Category="Camera Properties")
 	float CameraHeight;
@@ -58,6 +71,4 @@ private:
 	UPROPERTY(EditAnywhere,Category="Camera Properties")
 	float TargetArmLength;
 
-	
 };
-	
