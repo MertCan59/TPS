@@ -28,14 +28,13 @@ void UJump::BeginPlay()
 void UJump::Jump(const FInputActionValue& Value)
 {
 	const auto JumpDirection = FVector(0.f, 0.f, 1.f);
-	const FVector InitialLaunchVelocity = JumpDirection * JumpForce;
-
+	
 	if (OwningCharacter && MovementComponent )
 	{
 		if (!MovementComponent->IsFalling())
 		{
 			float DeltaTime = GetWorld()->GetDeltaSeconds();
-			float SmoothJumpForce = FMath::Lerp(JumpForce, 0.f, DeltaTime * SmoothFactor);
+			float SmoothJumpForce = FMath::Lerp(GetJumpForce(), 0.f, DeltaTime * SmoothFactor);
 			FVector SmoothLaunchVelocity = JumpDirection * SmoothJumpForce;
 			OwningCharacter->LaunchCharacter(SmoothLaunchVelocity, false, true);
 		}
