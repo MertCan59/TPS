@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PlayerMovementState.h"
 #include "GameFramework/Character.h"
 #include "TPS/Public/Controller/PlayerDefaultController.h"
 
@@ -12,9 +13,9 @@ class USceneComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UCapsuleComponent;
-class UMovement;
 
-struct FInputActionValue;
+class UMovement;
+class UJump;
 
 UCLASS()
 class TPS_API ATpsPlayer : public ACharacter
@@ -29,15 +30,17 @@ public:
 	virtual void OnConstruction(const FTransform& Transform)override;
 	virtual void PostInitProperties() override;
 	
-	void Move(const FInputActionValue& Value);
-
+// Set external variables for accessing from other classes 
+public:
+	
+	//** PLAYER STATE  **//
+	FORCEINLINE ECharacterState GetCharacterState() const{return CharacterState;}
+	FORCEINLINE void SetCharacterState(ECharacterState NewState);
 	
 protected:
-	// Called when the game starts or when spawned
+	ECharacterState CharacterState=ECharacterState::ECS_Idle;
 	virtual void BeginPlay() override;
-
-public:	
-
+	
 //For Components
 private:
 	UPROPERTY(VisibleAnywhere,Category="Components")
@@ -48,6 +51,9 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UMovement* MovementController;
+
+	UPROPERTY(VisibleAnywhere, Category="Components")
+	UJump* JumpController;
 	
 	UPROPERTY(VisibleAnywhere,Category="Camera")
 	USpringArmComponent* CameraBoom;
@@ -55,12 +61,7 @@ private:
 	UPROPERTY(VisibleAnywhere,Category="Camera")
 	UCameraComponent* ViewCamera;
 	
-	UPROPERTY(EditAnywhere,Category="Input Controller")
-	APlayerDefaultController* PlayerDefaultController;
-
-	
-	
-	//For polishing variables such as length, height
+//For polishing variables such as length, height
 private:
 	UPROPERTY(EditAnywhere,Category="Camera Properties")
 	float CameraHeight;
@@ -70,5 +71,8 @@ private:
 	
 	UPROPERTY(EditAnywhere,Category="Camera Properties")
 	float TargetArmLength;
+
+//For private funcs	
+private:
 
 };

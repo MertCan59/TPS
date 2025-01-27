@@ -1,17 +1,14 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+	// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TPS/Public/Characters/Player/TpsPlayer.h"
-
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-
 #include "Components/CapsuleComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
-
 #include "TPS/Public/Controller/PlayerDefaultController.h"
 #include "TPS/Public/Characters/Player/Movement/Movement.h"
+#include "Characters/Player/Movement/Jump.h"
 
 // Sets default values
 ATpsPlayer::ATpsPlayer()
@@ -32,6 +29,7 @@ ATpsPlayer::ATpsPlayer()
 	ViewCamera->SetupAttachment(CameraBoom);
 
 	MovementController=CreateDefaultSubobject<UMovement>(TEXT("MovementController"));
+	JumpController=CreateDefaultSubobject<UJump>(TEXT("JumpController"));
 }
 void ATpsPlayer::OnConstruction(const FTransform& Transform)
 {
@@ -42,15 +40,7 @@ void ATpsPlayer::PostInitProperties()
 {
 	Super::PostInitProperties();
 	CameraBoom->TargetArmLength=this->TargetArmLength;
-	CameraBoom->TargetOffset=FVector(0.0f,CameraYOffset,CameraHeight);
-}
-
-void ATpsPlayer::Move(const FInputActionValue& Value)
-{
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.5f, FColor::Red, "Move is working smoothly");
-	}
+	CameraBoom->SocketOffset=FVector(0.0f,CameraYOffset,CameraHeight);
 }
 
 // Called when the game starts or when spawned
@@ -69,14 +59,25 @@ void ATpsPlayer::Tick(float DeltaTime)
 void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
 	APlayerDefaultController* NewController = Cast<APlayerDefaultController>(GetController());
 	UMovement* Movement = Cast<UMovement>(MovementController);
+	UJump* Jump=Cast<UJump>(JumpController);
 	
 	checkf(NewController,TEXT("Controller has not been set"));
 	checkf(Movement,TEXT("Movement controller has not been found"));
+	checkf(Jump,TEXT("Jump controller has not been found"));
 	
 	if (UEnhancedInputComponent* EnhancedInputComponent=CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(NewController->GetMovementAction(),ETriggerEvent::Triggered,Movement,&UMovement::Move);
+		EnhancedInputComponent->BindAction(NewController->GetLookAction(),ETriggerEvent::Triggered,Movement,&UMovement::Look);
+		
+		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::Jump);
+		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Triggered,Jump,&UJump::StopJumping);
 	}
+}
+void ATpsPlayer::SetCharacterState(ECharacterState NewState)
+{
+	CharacterState=NewState;
 }

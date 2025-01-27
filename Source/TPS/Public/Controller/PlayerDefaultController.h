@@ -21,12 +21,12 @@ class TPS_API APlayerDefaultController : public APlayerController
 
 public:
 	FORCEINLINE UInputAction* GetMovementAction()const{return MovementAction;}
+	FORCEINLINE UInputAction* GetLookAction()const{return LookAction;}
+	FORCEINLINE UInputAction* GetJumpAction()const{return JumpAction;}
 
-	
 protected:
 	virtual void BeginPlay() override;
 
-	
 private:
 
 	UPROPERTY(EditAnywhere,Category="Input")
@@ -34,4 +34,10 @@ private:
 
 	UPROPERTY(EditAnywhere,Category="Input")
 	UInputAction* MovementAction;
+
+	UPROPERTY(EditAnywhere,Category="Input")
+	UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere,Category="Input")
+	UInputAction* JumpAction;
 };

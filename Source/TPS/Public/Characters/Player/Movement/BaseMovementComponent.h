@@ -22,5 +22,4 @@ public:
 protected:
 	UCharacterMovementComponent* MovementComponent;
 	ATpsPlayer* OwningCharacter;
-		
 };

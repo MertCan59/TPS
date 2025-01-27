@@ -12,10 +12,6 @@ void APlayerDefaultController::BeginPlay()
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem=ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(this->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(PlayerInputContext,0);
-			if (GEngine)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 1.5f, FColor::Red, "Default Controller has been set");
-			}
 		}
 	}
 }
