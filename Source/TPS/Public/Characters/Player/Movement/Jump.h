@@ -21,13 +21,12 @@ public:
 	virtual void BeginPlay() override;
 	void Jump(const FInputActionValue& Value);
 	void StopJumping(const FInputActionValue& Value);
-
 	
 //TODO:For Getter and Setter Functions
 public:
-
 	float GetMaxJumpHeight()const {return MaxJumpHeight;}
 	float GetJumpForce()const {return JumpForce;}
+	float GetSmoothFactor()const {return SmoothFactor;}
 
 //TODO:For general variables
 private:
@@ -39,6 +38,6 @@ private:
 	UPROPERTY(EditDefaultsOnly,Category="Jump Properties", meta=(AllowPrivateAccess=true))
 	float JumpForce;
 
-
+	UPROPERTY(EditDefaultsOnly,Category="Jump Properties", meta=(AllowPrivateAccess=true))
 	float SmoothFactor=2.0f;
 };

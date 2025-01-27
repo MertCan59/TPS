@@ -34,9 +34,10 @@ void UJump::Jump(const FInputActionValue& Value)
 		if (!MovementComponent->IsFalling())
 		{
 			float DeltaTime = GetWorld()->GetDeltaSeconds();
-			float SmoothJumpForce = FMath::Lerp(GetJumpForce(), 0.f, DeltaTime * SmoothFactor);
+			float SmoothJumpForce = FMath::Lerp(GetJumpForce(), 0.f, DeltaTime * GetSmoothFactor());
 			FVector SmoothLaunchVelocity = JumpDirection * SmoothJumpForce;
 			OwningCharacter->LaunchCharacter(SmoothLaunchVelocity, false, true);
+			OwningCharacter->SetCharacterState(ECharacterState::ECS_JumpingState);
 		}
 	}
 }
@@ -44,9 +45,11 @@ void UJump::StopJumping(const FInputActionValue& Value)
 {
 	if (MovementComponent->IsFalling())
 	{
+		OwningCharacter->SetCharacterState(ECharacterState::ECS_GravityState);
 		if (GEngine)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, .75f, FColor::Red, "Jump is canceled");
 		}
 	}
+	OwningCharacter->SetCharacterState(ECharacterState::ECS_Idle);
 }

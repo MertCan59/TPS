@@ -74,7 +74,7 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		EnhancedInputComponent->BindAction(NewController->GetLookAction(),ETriggerEvent::Triggered,Movement,&UMovement::Look);
 		
 		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::Jump);
-		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Triggered,Jump,&UJump::StopJumping);
+		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Completed,Jump,&UJump::StopJumping);
 	}
 }
 void ATpsPlayer::SetCharacterState(ECharacterState NewState)
