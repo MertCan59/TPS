@@ -81,4 +81,3 @@ bool UMovement::CanMove() const
 {
 	return OwningCharacter->GetCharacterState()==ECharacterState::ECS_Idle || OwningCharacter->GetCharacterState()==ECharacterState::ECS_MovementState;
 }
-
