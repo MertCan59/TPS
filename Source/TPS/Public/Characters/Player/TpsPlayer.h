@@ -35,7 +35,10 @@ public:
 	
 	//** PLAYER STATE  **//
 	FORCEINLINE ECharacterState GetCharacterState() const{return CharacterState;}
-	FORCEINLINE void SetCharacterState(ECharacterState NewState);
+	FORCEINLINE void SetCharacterState(ECharacterState NewState){CharacterState=NewState;}
+
+	//** PLAYER GROUND CONTROLLER  **/
+	FORCEINLINE bool GetCharacterGrounded() const{return bIsGrounded;};
 	
 protected:
 	ECharacterState CharacterState=ECharacterState::ECS_Idle;
@@ -71,6 +74,9 @@ private:
 	
 	UPROPERTY(EditAnywhere,Category="Camera Properties")
 	float TargetArmLength;
+
+	
+	bool bIsGrounded;
 
 //For private funcs	
 private:

@@ -20,13 +20,16 @@ public:
 	UJump();
 	virtual void BeginPlay() override;
 	void Jump(const FInputActionValue& Value);
-	void StopJumping(const FInputActionValue& Value);
+	void StopJump(const FInputActionValue& Value);
 	
 //TODO:For Getter and Setter Functions
 public:
 	float GetMaxJumpHeight()const {return MaxJumpHeight;}
 	float GetJumpForce()const {return JumpForce;}
 	float GetSmoothFactor()const {return SmoothFactor;}
+
+//TODO: For private funcs	
+private:
 
 //TODO:For general variables
 private:

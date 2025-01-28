@@ -1,5 +1,4 @@
-	// Fill out your copyright notice in the Description page of Project Settings.
-
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TPS/Public/Characters/Player/TpsPlayer.h"
 #include "EnhancedInputComponent.h"
@@ -9,12 +8,15 @@
 #include "TPS/Public/Controller/PlayerDefaultController.h"
 #include "TPS/Public/Characters/Player/Movement/Movement.h"
 #include "Characters/Player/Movement/Jump.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ATpsPlayer::ATpsPlayer()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
+	
 	PlayerRootComponent=CreateDefaultSubobject<USceneComponent>(TEXT("PlayerRootComponent"));
 	SetRootComponent(PlayerRootComponent);
 
@@ -29,6 +31,7 @@ ATpsPlayer::ATpsPlayer()
 	ViewCamera->SetupAttachment(CameraBoom);
 
 	MovementController=CreateDefaultSubobject<UMovement>(TEXT("MovementController"));
+	
 	JumpController=CreateDefaultSubobject<UJump>(TEXT("JumpController"));
 }
 void ATpsPlayer::OnConstruction(const FTransform& Transform)
@@ -53,9 +56,23 @@ void ATpsPlayer::BeginPlay()
 void ATpsPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	bIsGrounded=!GetCharacterMovement()->IsFalling();
+
+	//TODO: Set to the Animinstance LATER
+	if (GetCharacterGrounded())
+	{
+		auto VelocityXY=GetVelocity();
+		float Speed=UKismetMathLibrary::VSizeXY(VelocityXY);
+		if (Speed > 0.1f)
+		{
+			SetCharacterState(ECharacterState::ECS_MovementState);
+		}else
+		{
+			SetCharacterState(ECharacterState::ECS_Idle);
+		}
+	}
 }
 
-// Called to bind functionality to input
 void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -74,10 +91,6 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		EnhancedInputComponent->BindAction(NewController->GetLookAction(),ETriggerEvent::Triggered,Movement,&UMovement::Look);
 		
 		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::Jump);
-		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Completed,Jump,&UJump::StopJumping);
+		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Completed,Jump,&UJump::StopJump);
 	}
-}
-void ATpsPlayer::SetCharacterState(ECharacterState NewState)
-{
-	CharacterState=NewState;
 }

@@ -7,7 +7,6 @@
 // Sets default values for this component's properties
 UBaseMovementComponent::UBaseMovementComponent()
 {
-	PrimaryComponentTick.bCanEverTick = false;
 	OwningCharacter=Cast<ATpsPlayer>(GetOwner());
 	if (OwningCharacter)
 	{
