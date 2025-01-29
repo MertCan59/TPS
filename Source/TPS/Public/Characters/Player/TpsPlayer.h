@@ -35,7 +35,7 @@ public:
 	
 	//** PLAYER STATE  **//
 	FORCEINLINE ECharacterState GetCharacterState() const{return CharacterState;}
-	FORCEINLINE void SetCharacterState(ECharacterState NewState){CharacterState=NewState;}
+	FORCEINLINE void SetCharacterState(ECharacterState NewState){CharacterState=NewState;}	
 
 	//** PLAYER GROUND CONTROLLER  **/
 	FORCEINLINE bool GetCharacterGrounded() const{return bIsGrounded;};

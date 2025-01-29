@@ -56,5 +56,6 @@ private:
 //For private funcs
 private:
 	bool CanMove()const;
+	bool IsYawRestricted()const;
 };
 

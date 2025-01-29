@@ -64,12 +64,12 @@ void UMovement::Look(const FInputActionValue& Value)
 		FRotator CurrentRotation = OwningCharacter->Controller->GetControlRotation();
 		FRotator TargetRotation = CurrentRotation;
 		
-		if (LookAxis.X != 0)
+		if (LookAxis.X != 0 && !IsYawRestricted())
 		{
 			TargetRotation.Yaw += LookAxis.X;
 		}
 		
-		if (LookAxis.Y != 0)
+		if (LookAxis.Y != 0 )
 		{
 			TargetRotation.Pitch = FMath::Clamp(TargetRotation.Pitch + LookAxis.Y, -89.0f, 89.0f); 
 		}
@@ -80,4 +80,9 @@ void UMovement::Look(const FInputActionValue& Value)
 bool UMovement::CanMove() const
 {
 	return OwningCharacter->GetCharacterState()==ECharacterState::ECS_Idle || OwningCharacter->GetCharacterState()==ECharacterState::ECS_MovementState;
+}
+
+bool UMovement::IsYawRestricted() const
+{
+	return OwningCharacter->GetCharacterState()==ECharacterState::ECS_GravityState || OwningCharacter->GetCharacterState()==ECharacterState::ECS_JumpingState;
 }
