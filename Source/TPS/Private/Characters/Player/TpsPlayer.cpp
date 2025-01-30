@@ -10,6 +10,7 @@
 #include "Characters/Player/Movement/Jump.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Math/UnitConversion.h"
 
 // Sets default values
 ATpsPlayer::ATpsPlayer()
@@ -37,6 +38,7 @@ ATpsPlayer::ATpsPlayer()
 void ATpsPlayer::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
+	
 }
 
 void ATpsPlayer::PostInitProperties()
@@ -71,6 +73,14 @@ void ATpsPlayer::Tick(float DeltaTime)
 			SetCharacterState(ECharacterState::ECS_Idle);
 		}
 	}
+	
+	if (bIsSprint)
+	{
+		MovementController->SetCurrentSpeed(MovementController->GetCachedSpeed() * 2.0f);
+	}else
+	{
+		MovementController->SetCurrentSpeed(MovementController->GetCachedSpeed());
+	}
 }
 
 void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -88,6 +98,9 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	if (UEnhancedInputComponent* EnhancedInputComponent=CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(NewController->GetMovementAction(),ETriggerEvent::Triggered,Movement,&UMovement::Move);
+		EnhancedInputComponent->BindAction(NewController->GetRunningAction(),ETriggerEvent::Triggered,Movement,&UMovement::SprintStart);
+		EnhancedInputComponent->BindAction(NewController->GetRunningAction(),ETriggerEvent::Completed,Movement,&UMovement::SprintStop);
+		
 		EnhancedInputComponent->BindAction(NewController->GetLookAction(),ETriggerEvent::Triggered,Movement,&UMovement::Look);
 		
 		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::Jump);

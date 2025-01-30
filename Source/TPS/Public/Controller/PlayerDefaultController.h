@@ -23,6 +23,7 @@ public:
 	FORCEINLINE UInputAction* GetMovementAction()const{return MovementAction;}
 	FORCEINLINE UInputAction* GetLookAction()const{return LookAction;}
 	FORCEINLINE UInputAction* GetJumpAction()const{return JumpAction;}
+	FORCEINLINE UInputAction* GetRunningAction()const{return RunningAction;}
 
 protected:
 	virtual void BeginPlay() override;
@@ -40,4 +41,7 @@ private:
 
 	UPROPERTY(EditAnywhere,Category="Input")
 	UInputAction* JumpAction;
+
+	UPROPERTY(EditAnywhere,Category="Input")
+	UInputAction* RunningAction;
 };

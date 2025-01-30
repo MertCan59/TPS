@@ -18,18 +18,14 @@ UMovement::UMovement()
 void UMovement::BeginPlay()
 {
 	Super::BeginPlay();
+	CachedSpeed=CurrentSpeed;
 	if (auto MovementDerived=Cast<UMovement>(this))
 	{
-		MovementComponent->MaxWalkSpeed=MovementDerived->GetCurrentSpeed();
-		MovementComponent->MaxWalkSpeed=UKismetMathLibrary::Clamp
-		(
-			MovementComponent->MaxWalkSpeed,
-			MovementDerived->GetCurrentSpeed(),
-			MovementDerived->GetMaxSpeed()
-		);
 		MovementComponent->MaxAcceleration=MovementDerived->GetMaxAcceleration();
 		MovementComponent->BrakingDecelerationWalking=MovementDerived->GetMaxDeceleration();
+		
 	}
+	
 }
 
 void UMovement::Move(const FInputActionValue& Value)
@@ -53,6 +49,20 @@ void UMovement::Move(const FInputActionValue& Value)
 			OwningCharacter->AddMovementInput(ForwardDirection, MovementInput.Y);
 		}
 	}
+	if (auto MovementDerived=Cast<UMovement>(this))
+	{
+		MovementComponent->MaxWalkSpeed=MovementDerived->GetCurrentSpeed();
+	}
+}
+
+void UMovement::SprintStart(const FInputActionValue& Value)
+{
+	OwningCharacter->SetCharacterSprinting(true);
+}
+
+void UMovement::SprintStop(const FInputActionValue& Value)
+{
+	OwningCharacter->SetCharacterSprinting(false);
 }
 
 void UMovement::Look(const FInputActionValue& Value) 

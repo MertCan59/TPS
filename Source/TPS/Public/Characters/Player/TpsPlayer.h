@@ -35,10 +35,12 @@ public:
 	
 	//** PLAYER STATE  **//
 	FORCEINLINE ECharacterState GetCharacterState() const{return CharacterState;}
-	FORCEINLINE void SetCharacterState(ECharacterState NewState){CharacterState=NewState;}	
+	FORCEINLINE void SetCharacterState(ECharacterState NewState){CharacterState=NewState;}
+	FORCEINLINE void SetCharacterSprinting(bool Sprint){bIsSprint=Sprint;}
 
 	//** PLAYER GROUND CONTROLLER  **/
-	FORCEINLINE bool GetCharacterGrounded() const{return bIsGrounded;};
+	FORCEINLINE bool GetCharacterGrounded() const{return bIsGrounded;}
+	FORCEINLINE bool GetCharacterSprint() const{return bIsSprint;}
 	
 protected:
 	ECharacterState CharacterState=ECharacterState::ECS_Idle;
@@ -77,6 +79,7 @@ private:
 
 	
 	bool bIsGrounded;
+	bool bIsSprint;
 
 //For private funcs	
 private:

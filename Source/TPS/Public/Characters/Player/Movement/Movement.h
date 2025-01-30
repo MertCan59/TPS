@@ -20,19 +20,24 @@ public:
 	UMovement();
 	virtual void BeginPlay() override;
 	void Move(const FInputActionValue& Value);
+	void SprintStart(const FInputActionValue& Value);
+	void SprintStop(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	
 //TODO:For Getter and Setter Functions
 public:
-	//** SPEED FUNCTIONS **//
+	//**GET SPEED FUNCTIONS **//
 	float GetMaxSpeed() const{return MaxSpeed;}
 	float GetCurrentSpeed() const{return CurrentSpeed;}
+	float GetCachedSpeed() const{return CachedSpeed;}
 	float GetMaxAcceleration() const{return MaxAcceleration;}
 	float GetMaxDeceleration() const{return MaxDeceleration;}
-
-	//** LOOK FUNCTIONS **//
+	
+	//**SET SPEED FUNCTIONS **//
+	void SetCurrentSpeed(float NewSpeed) {CurrentSpeed=NewSpeed;}
+	
+	//**GET LOOK FUNCTIONS **//
 	float GetCameraSpeed() const{return CameraSpeed;}
-
 	
 private:
 
@@ -49,13 +54,15 @@ private:
 	UPROPERTY(EditDefaultsOnly,Category="Movement Properties", meta=(AllowPrivateAccess=true))
 	float MaxDeceleration=50.f;
 	
+	float CachedSpeed;
 	//** LOOK VARIABLES **//
 	UPROPERTY(EditDefaultsOnly,Category="Look Properties", meta=(AllowPrivateAccess=true))
 	float CameraSpeed=FMath::Clamp(CameraSpeed, 10.0f, 100.0f);
-
+	
 //For private funcs
 private:
 	bool CanMove()const;
 	bool IsYawRestricted()const;
 };
+
 
