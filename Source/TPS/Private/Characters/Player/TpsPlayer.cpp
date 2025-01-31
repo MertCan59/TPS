@@ -73,14 +73,6 @@ void ATpsPlayer::Tick(float DeltaTime)
 			SetCharacterState(ECharacterState::ECS_Idle);
 		}
 	}
-	
-//if (bIsSprint)
-//{
-//	
-//}else
-//{
-//	MovementController->SetCurrentSpeed(MovementController->GetCachedSpeed());
-//}
 }
 
 void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

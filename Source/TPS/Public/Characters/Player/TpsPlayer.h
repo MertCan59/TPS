@@ -79,7 +79,6 @@ private:
 	
 	UPROPERTY(EditAnywhere,Category="Camera Properties")
 	float TargetArmLength;
-
 	
 	bool bIsGrounded;
 	bool bIsSprint;
