@@ -21,3 +21,19 @@ enum class ECharacterMoveState : uint8
 	ECS_Jog UMETA(DisplayName = " Jogging State"),
 	ECS_Run UMETA(DisplayName = "Running State"), 
 };
+
+UENUM(BlueprintType)
+enum class ECharacterCurrentMoveState : uint8
+{
+	ECS_Forward UMETA(DisplayName = "Forward State"),
+	ECS_ForwardLeft UMETA(DisplayName = "Forward Left State"),
+	ECS_ForwardRight UMETA(DisplayName = "Forward Right"),
+	
+	ECS_Backward UMETA(DisplayName = "Backward State"),
+	ECS_BackwardLeft UMETA(DisplayName = "Backward Left State"),
+	ECS_BackwardRight UMETA(DisplayName = "Backward Right"),
+	
+	ECS_Left UMETA(DisplayName = " Left State"),
+	ECS_Right UMETA(DisplayName = "Right State"), 
+};
+

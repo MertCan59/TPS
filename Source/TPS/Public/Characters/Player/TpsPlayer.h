@@ -41,7 +41,10 @@ public:
 	//** PLAYER GROUND CONTROLLER  **/
 	FORCEINLINE bool GetCharacterGrounded() const{return bIsGrounded;}
 	FORCEINLINE bool GetCharacterSprint() const{return bIsSprint;}
-	
+	FORCEINLINE USpringArmComponent* GetArmSpring() const{return CameraBoom;}
+
+	//** PLAYER Jog CONTROLLER  **/
+	UMovement* GetMovement() const{return MovementController;}
 protected:
 	ECharacterState CharacterState=ECharacterState::ECS_Idle;
 	virtual void BeginPlay() override;
@@ -83,5 +86,4 @@ private:
 
 //For private funcs	
 private:
-
 };

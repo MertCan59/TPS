@@ -24,6 +24,7 @@ public:
 	void SprintStop(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	
+	
 //TODO:For Getter and Setter Functions
 public:
 	//**GET SPEED FUNCTIONS **//
@@ -32,7 +33,7 @@ public:
 	float GetCachedSpeed() const{return CachedSpeed;}
 	float GetMaxAcceleration() const{return MaxAcceleration;}
 	float GetMaxDeceleration() const{return MaxDeceleration;}
-	
+	FVector2D GetCurrentVelocity() const{return  CachedInput;}
 	//**SET SPEED FUNCTIONS **//
 	void SetCurrentSpeed(float NewSpeed) {CurrentSpeed=NewSpeed;}
 	
@@ -54,6 +55,11 @@ private:
 	UPROPERTY(EditDefaultsOnly,Category="Movement Properties", meta=(AllowPrivateAccess=true))
 	float MaxDeceleration=50.f;
 	
+	UPROPERTY(EditDefaultsOnly,Category="Movement Properties", meta=(AllowPrivateAccess=true))
+	float SprintModifier=1.f;
+
+	FVector2D CachedInput;
+	
 	float CachedSpeed;
 	//** LOOK VARIABLES **//
 	UPROPERTY(EditDefaultsOnly,Category="Look Properties", meta=(AllowPrivateAccess=true))
@@ -64,5 +70,3 @@ private:
 	bool CanMove()const;
 	bool IsYawRestricted()const;
 };
-
-

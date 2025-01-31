@@ -74,13 +74,13 @@ void ATpsPlayer::Tick(float DeltaTime)
 		}
 	}
 	
-	if (bIsSprint)
-	{
-		MovementController->SetCurrentSpeed(MovementController->GetCachedSpeed() * 2.0f);
-	}else
-	{
-		MovementController->SetCurrentSpeed(MovementController->GetCachedSpeed());
-	}
+//if (bIsSprint)
+//{
+//	
+//}else
+//{
+//	MovementController->SetCurrentSpeed(MovementController->GetCachedSpeed());
+//}
 }
 
 void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
