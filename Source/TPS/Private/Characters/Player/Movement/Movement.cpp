@@ -35,7 +35,7 @@ void UMovement::Move(const FInputActionValue& Value)
 	
 	const auto MovementInput=Value.Get<FVector2D>();
 	CachedInput=MovementInput;
-
+	
 	if (OwningCharacter)
 	{
 		const auto ControlRotation=OwningCharacter->GetControlRotation();
@@ -55,6 +55,7 @@ void UMovement::Move(const FInputActionValue& Value)
 		{
 			OwningCharacter->AddMovementInput(ForwardDirection, MovementInput.Y);
 		}
+		
 	}
 	if (auto MovementDerived=Cast<UMovement>(this))
 	{
@@ -66,6 +67,7 @@ void UMovement::Look(const FInputActionValue& Value)
 {
 	const auto LookAxis = Value.Get<FVector2D>();
 
+	if (OwningCharacter->GetCharacterState()==ECharacterState::ECS_JumpingState)return;
 	if (OwningCharacter && OwningCharacter->Controller)
 	{
 		

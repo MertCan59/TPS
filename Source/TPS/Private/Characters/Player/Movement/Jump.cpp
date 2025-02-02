@@ -24,6 +24,10 @@ void UJump::ApplyJump()
 	const auto JumpDirection = FVector(0.f, 0.f, 1.f);
 	if (OwningCharacter && MovementComponent)
 	{
+		FVector CurrentVelocity = MovementComponent->Velocity;
+		CurrentVelocity.X = 0.f; 
+		CurrentVelocity.Y = 0.f; 
+		MovementComponent->Velocity = CurrentVelocity; 
 		if (!MovementComponent->IsFalling() && OwningCharacter->GetCharacterGrounded())
 		{
 			float DeltaTime = GetWorld()->GetDeltaSeconds();

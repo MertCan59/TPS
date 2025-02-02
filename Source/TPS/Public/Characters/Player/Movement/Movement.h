@@ -27,6 +27,7 @@ public:
 	
 //TODO:For Getter and Setter Functions
 public:
+	
 	//**GET SPEED FUNCTIONS **//
 	float GetMaxSpeed() const{return MaxSpeed;}
 	float GetCurrentSpeed() const{return CurrentSpeed;}
@@ -57,17 +58,18 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly,Category="Movement Properties", meta=(AllowPrivateAccess=true))
 	float SprintModifier=1.f;
-
+	
+	//** LOOK VARIABLES **//
+	UPROPERTY(EditDefaultsOnly,Category="Look Properties", meta=(AllowPrivateAccess=true))
+	float CameraSpeed=FMath::Clamp(CameraSpeed, 10.0f, 100.0f);
+	
 	FVector2D CachedInput;
 	
 	float CachedSpeed;
 
 	FRotator CachedArmSpringRotation;
 	FRotator CachedPawnRotation;
-	//** LOOK VARIABLES **//
-	UPROPERTY(EditDefaultsOnly,Category="Look Properties", meta=(AllowPrivateAccess=true))
-	float CameraSpeed=FMath::Clamp(CameraSpeed, 10.0f, 100.0f);
-	
+
 //For private funcs
 private:
 	bool CanMove()const;

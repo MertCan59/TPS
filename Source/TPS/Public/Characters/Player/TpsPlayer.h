@@ -13,7 +13,6 @@ class USceneComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UCapsuleComponent;
-
 class UMovement;
 class UJump;
 
@@ -29,6 +28,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void OnConstruction(const FTransform& Transform)override;
 	virtual void PostInitProperties() override;
+	
 // Set external variables for accessing from other classes 
 public:
 	
@@ -83,7 +83,6 @@ private:
 	
 	bool bIsGrounded;
 	bool bIsSprint;
-	
 
 //For private funcs	
 private:
