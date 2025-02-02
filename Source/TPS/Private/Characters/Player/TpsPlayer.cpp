@@ -10,7 +10,6 @@
 #include "Characters/Player/Movement/Jump.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Math/UnitConversion.h"
 
 // Sets default values
 ATpsPlayer::ATpsPlayer()
@@ -34,6 +33,8 @@ ATpsPlayer::ATpsPlayer()
 	MovementController=CreateDefaultSubobject<UMovement>(TEXT("MovementController"));
 	
 	JumpController=CreateDefaultSubobject<UJump>(TEXT("JumpController"));
+
+	
 }
 void ATpsPlayer::OnConstruction(const FTransform& Transform)
 {
@@ -59,8 +60,7 @@ void ATpsPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	bIsGrounded=!GetCharacterMovement()->IsFalling();
-
-	//TODO: Set to the Animinstance LATER
+	
 	if (GetCharacterGrounded())
 	{
 		auto VelocityXY=GetVelocity();
@@ -95,7 +95,7 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		
 		EnhancedInputComponent->BindAction(NewController->GetLookAction(),ETriggerEvent::Triggered,Movement,&UMovement::Look);
 		
-		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::Jump);
-		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Completed,Jump,&UJump::StopJump);
+		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::PlayMontage);
+		//EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Completed,Jump,&UJump::StopJump);
 	}
 }

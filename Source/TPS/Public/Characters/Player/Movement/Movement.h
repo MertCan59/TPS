@@ -61,6 +61,9 @@ private:
 	FVector2D CachedInput;
 	
 	float CachedSpeed;
+
+	FRotator CachedArmSpringRotation;
+	FRotator CachedPawnRotation;
 	//** LOOK VARIABLES **//
 	UPROPERTY(EditDefaultsOnly,Category="Look Properties", meta=(AllowPrivateAccess=true))
 	float CameraSpeed=FMath::Clamp(CameraSpeed, 10.0f, 100.0f);

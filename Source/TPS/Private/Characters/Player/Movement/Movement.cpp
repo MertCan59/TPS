@@ -20,6 +20,8 @@ void UMovement::BeginPlay()
 {
 	Super::BeginPlay();
 	CachedSpeed=CurrentSpeed;
+	CachedArmSpringRotation=OwningCharacter->GetArmSpring()->GetRelativeRotation();
+	CachedPawnRotation=OwningCharacter->GetController()->GetControlRotation();
 	if (auto MovementDerived=Cast<UMovement>(this))
 	{
 		MovementComponent->MaxAcceleration=MovementDerived->GetMaxAcceleration();
@@ -63,24 +65,57 @@ void UMovement::Move(const FInputActionValue& Value)
 void UMovement::Look(const FInputActionValue& Value)
 {
 	const auto LookAxis = Value.Get<FVector2D>();
-	
+
 	if (OwningCharacter && OwningCharacter->Controller)
 	{
-		FRotator CurrentRotation = OwningCharacter->Controller->GetControlRotation();
-		FRotator TargetRotation = CurrentRotation;
 		
-		if (LookAxis.X != 0 && !IsYawRestricted())
+		if (OwningCharacter->GetCharacterState()!=ECharacterState::ECS_MovementState)
 		{
-			TargetRotation.Yaw += LookAxis.X;
-		}
+			OwningCharacter->GetArmSpring()->bUsePawnControlRotation=false;
+			FRotator NewRotation = OwningCharacter->GetArmSpring()->GetRelativeRotation();
+			FRotator TargetRotation=NewRotation;
+			
+			if (LookAxis.X!=0 && !IsYawRestricted())
+			{
+				TargetRotation.Yaw += LookAxis.X;
+			}
+			if (LookAxis.Y != 0 )
+			{
+				TargetRotation.Pitch = FMath::Clamp(TargetRotation.Pitch + LookAxis.Y, -89.0f, 89.0f); 
+			}
+			
+			FRotator SmoothRotation=UKismetMathLibrary::RInterpTo(
+				NewRotation,
+				TargetRotation,
+				GetWorld()->GetDeltaSeconds(),
+				GetCameraSpeed()
+				);
+			
+			OwningCharacter->GetArmSpring()->SetRelativeRotation(SmoothRotation);
+		}else
+		{
+			FRotator SmoothArmSpringRotation=UKismetMathLibrary::RInterpTo(
+				OwningCharacter->GetArmSpring()->GetRelativeRotation(),
+				CachedArmSpringRotation,
+				GetWorld()->GetDeltaSeconds(),
+				GetCameraSpeed()
+				);
+			OwningCharacter->GetArmSpring()->SetRelativeRotation(SmoothArmSpringRotation);
+			OwningCharacter->GetArmSpring()->bUsePawnControlRotation=true;
+			FRotator CurrentRotation = OwningCharacter->Controller->GetControlRotation();
+			FRotator TargetRotation = CurrentRotation;
+			if (LookAxis.X != 0 && !IsYawRestricted())
+			{
+				TargetRotation.Yaw += LookAxis.X;
+			}
 		
-		if (LookAxis.Y != 0 )
-		{
-			TargetRotation.Pitch = FMath::Clamp(TargetRotation.Pitch + LookAxis.Y, -89.0f, 89.0f); 
+			if (LookAxis.Y != 0 )
+			{
+				TargetRotation.Pitch = FMath::Clamp(TargetRotation.Pitch + LookAxis.Y, -89.0f, 89.0f); 
+			}
+			FRotator SmoothedRotation = UKismetMathLibrary::RInterpTo(CurrentRotation, TargetRotation, GetWorld()->GetDeltaSeconds(), GetCameraSpeed());
+			OwningCharacter->GetController()->SetControlRotation(SmoothedRotation);
 		}
-		FRotator SmoothedRotation = UKismetMathLibrary::RInterpTo(CurrentRotation, TargetRotation, GetWorld()->GetDeltaSeconds(), GetCameraSpeed());
-		OwningCharacter->Controller->SetControlRotation(SmoothedRotation);
-
 	}
 }
 

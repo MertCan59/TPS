@@ -29,7 +29,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void OnConstruction(const FTransform& Transform)override;
 	virtual void PostInitProperties() override;
-	
 // Set external variables for accessing from other classes 
 public:
 	
@@ -42,9 +41,11 @@ public:
 	FORCEINLINE bool GetCharacterGrounded() const{return bIsGrounded;}
 	FORCEINLINE bool GetCharacterSprint() const{return bIsSprint;}
 	FORCEINLINE USpringArmComponent* GetArmSpring() const{return CameraBoom;}
-
+	FORCEINLINE UJump* GetJump()const {return JumpController;}
+	
 	//** PLAYER Jog CONTROLLER  **/
 	UMovement* GetMovement() const{return MovementController;}
+	
 protected:
 	ECharacterState CharacterState=ECharacterState::ECS_Idle;
 	virtual void BeginPlay() override;
@@ -82,6 +83,7 @@ private:
 	
 	bool bIsGrounded;
 	bool bIsSprint;
+	
 
 //For private funcs	
 private:
