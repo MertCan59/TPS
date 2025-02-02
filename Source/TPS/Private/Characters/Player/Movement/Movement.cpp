@@ -74,8 +74,8 @@ void UMovement::Look(const FInputActionValue& Value)
 		if (OwningCharacter->GetCharacterState()!=ECharacterState::ECS_MovementState)
 		{
 			OwningCharacter->GetArmSpring()->bUsePawnControlRotation=false;
-			FRotator NewRotation = OwningCharacter->GetArmSpring()->GetRelativeRotation();
-			FRotator TargetRotation=NewRotation;
+			FRotator Current = OwningCharacter->GetArmSpring()->GetRelativeRotation();
+			FRotator TargetRotation=Current;
 			
 			if (LookAxis.X!=0 && !IsYawRestricted())
 			{
@@ -85,14 +85,12 @@ void UMovement::Look(const FInputActionValue& Value)
 			{
 				TargetRotation.Pitch = FMath::Clamp(TargetRotation.Pitch + LookAxis.Y, -89.0f, 89.0f); 
 			}
-			
 			FRotator SmoothRotation=UKismetMathLibrary::RInterpTo(
-				NewRotation,
+				Current,
 				TargetRotation,
 				GetWorld()->GetDeltaSeconds(),
 				GetCameraSpeed()
 				);
-			
 			OwningCharacter->GetArmSpring()->SetRelativeRotation(SmoothRotation);
 		}else
 		{
