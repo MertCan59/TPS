@@ -24,7 +24,6 @@ public:
 	void SprintStop(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	
-	
 //TODO:For Getter and Setter Functions
 public:
 	
