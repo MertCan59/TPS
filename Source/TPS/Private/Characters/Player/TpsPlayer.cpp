@@ -2,13 +2,16 @@
 
 #include "TPS/Public/Characters/Player/TpsPlayer.h"
 #include "EnhancedInputComponent.h"
+#include "Animations/PlayerAnimations/PlayerAnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "TPS/Public/Controller/PlayerDefaultController.h"
 #include "TPS/Public/Characters/Player/Movement/Movement.h"
 #include "Characters/Player/Movement/Jump.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Items/Weapon/WeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -33,7 +36,6 @@ ATpsPlayer::ATpsPlayer()
 	MovementController=CreateDefaultSubobject<UMovement>(TEXT("MovementController"));
 	
 	JumpController=CreateDefaultSubobject<UJump>(TEXT("JumpController"));
-
 	
 }
 void ATpsPlayer::OnConstruction(const FTransform& Transform)
@@ -53,6 +55,7 @@ void ATpsPlayer::PostInitProperties()
 void ATpsPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+	PlayerCapsule->OnComponentBeginOverlap.AddDynamic(this,&ATpsPlayer::OnSphereOverlap);
 }
 
 // Called every frame
@@ -97,5 +100,23 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		
 		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::PlayMontage);
 		//EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Completed,Jump,&UJump::StopJump);
+	}
+}
+
+void ATpsPlayer::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AWeaponBase* OverlappingWeapon=Cast<AWeaponBase>(OtherActor);
+	if( OverlappingWeapon )
+	{
+		OverlappingWeapon->Equip(GetMesh(),FName("RightHandSocket"),this,this);
+		OverlappingWeapon->SetOwner(this);
+		OverlappingWeapon->SetInstigator(this);
+		EquippedWeapon = OverlappingWeapon;
+		bHasWeapon=true;
+		CharacterIdleState=ECharacterIdleState::ECS_Equipped;
+		EquippedWeapon->GetWeaponOverlapSphere()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		EquippedWeapon->GetWeaponOverlapSphere()->SetCollisionResponseToAllChannels(ECR_Ignore);
+		OverlappingWeapon = nullptr;
 	}
 }

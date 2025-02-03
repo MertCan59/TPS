@@ -9,12 +9,16 @@
 
 #include "TpsPlayer.generated.h"
 
+
+class UPlayerAnimInstance;
 class USceneComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UCapsuleComponent;
 class UMovement;
 class UJump;
+
+class AWeaponBase;
 
 UCLASS()
 class TPS_API ATpsPlayer : public ACharacter
@@ -34,23 +38,38 @@ public:
 	
 	//** PLAYER STATE  **//
 	FORCEINLINE ECharacterState GetCharacterState() const{return CharacterState;}
+	FORCEINLINE ECharacterIdleState GetCharacterIdleState() const{return CharacterIdleState;}
 	FORCEINLINE void SetCharacterState(ECharacterState NewState){CharacterState=NewState;}
 	FORCEINLINE void SetCharacterSprinting(bool Sprint){bIsSprint=Sprint;}
 
 	//** PLAYER GROUND CONTROLLER  **/
 	FORCEINLINE bool GetCharacterGrounded() const{return bIsGrounded;}
 	FORCEINLINE bool GetCharacterSprint() const{return bIsSprint;}
+	FORCEINLINE bool GetHasWeapon() const{return bHasWeapon;}
+	
 	FORCEINLINE USpringArmComponent* GetArmSpring() const{return CameraBoom;}
 	FORCEINLINE UJump* GetJump()const {return JumpController;}
+	FORCEINLINE UCapsuleComponent* GetPlayerCapsule()const {return PlayerCapsule;}
 	
 	//** PLAYER Jog CONTROLLER  **/
 	UMovement* GetMovement() const{return MovementController;}
 	
 protected:
-	ECharacterState CharacterState=ECharacterState::ECS_Idle;
 	virtual void BeginPlay() override;
 	
-//For Components
+	UFUNCTION()
+	virtual void OnSphereOverlap(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult
+		);
+	ECharacterState CharacterState=ECharacterState::ECS_Idle;
+	ECharacterIdleState CharacterIdleState=ECharacterIdleState::ECS_Unequipped;
+	
+			//** For Components **//
 private:
 	UPROPERTY(VisibleAnywhere,Category="Components")
 	USceneComponent* PlayerRootComponent;
@@ -69,6 +88,9 @@ private:
 	
 	UPROPERTY(VisibleAnywhere,Category="Camera")
 	UCameraComponent* ViewCamera;
+
+	UPROPERTY(VisibleAnywhere,Category="Weapon")
+	AWeaponBase* EquippedWeapon;
 	
 //For polishing variables such as length, height
 private:
@@ -80,9 +102,17 @@ private:
 	
 	UPROPERTY(EditAnywhere,Category="Camera Properties")
 	float TargetArmLength;
+
+	UPROPERTY(EditAnywhere,Category="Test Values")
+	float a;
+	UPROPERTY(EditAnywhere,Category="Test Values")
+	float b;
+	UPROPERTY(EditAnywhere,Category="Test Values")
+	float c;
 	
 	bool bIsGrounded;
 	bool bIsSprint;
+	bool bHasWeapon=false;
 
 //For private funcs	
 private:

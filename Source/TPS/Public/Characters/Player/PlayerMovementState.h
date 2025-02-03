@@ -12,8 +12,8 @@ UENUM(BlueprintType)
 enum class ECharacterIdleState : uint8
 {
 	ECS_Unequipped UMETA(DisplayName = "Unequipped Idle State"), 
-	ECS_OneHanded UMETA(DisplayName = "One Handed Idle State"), 
-	ECS_TwoHanded UMETA(DisplayName = "Two Handed Idle State"), 
+	ECS_Equipped UMETA(DisplayName = "Equipped  Idle State"), 
+	 
 };
 UENUM(BlueprintType)
 enum class ECharacterMoveState : uint8
