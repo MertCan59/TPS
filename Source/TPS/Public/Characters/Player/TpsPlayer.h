@@ -26,7 +26,7 @@ class TPS_API ATpsPlayer : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
+	// Sets default functions for this character's properties
 	ATpsPlayer();
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -46,6 +46,10 @@ public:
 	FORCEINLINE bool GetCharacterGrounded() const{return bIsGrounded;}
 	FORCEINLINE bool GetCharacterSprint() const{return bIsSprint;}
 	FORCEINLINE bool GetHasWeapon() const{return bHasWeapon;}
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE AWeaponBase* GetWeaponBase()const{return EquippedWeapon;}
+	
 	
 	FORCEINLINE USpringArmComponent* GetArmSpring() const{return CameraBoom;}
 	FORCEINLINE UJump* GetJump()const {return JumpController;}
@@ -91,6 +95,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere,Category="Weapon")
 	AWeaponBase* EquippedWeapon;
+
+	UPROPERTY(VisibleAnywhere,Category="Weapon | Attached Weapons")
+	TArray<AWeaponBase*> EquippedWeapons;
 	
 //For polishing variables such as length, height
 private:
@@ -103,16 +110,11 @@ private:
 	UPROPERTY(EditAnywhere,Category="Camera Properties")
 	float TargetArmLength;
 
-	UPROPERTY(EditAnywhere,Category="Test Values")
-	float a;
-	UPROPERTY(EditAnywhere,Category="Test Values")
-	float b;
-	UPROPERTY(EditAnywhere,Category="Test Values")
-	float c;
-	
+	//** GENERAL CONTROLLERS **//
 	bool bIsGrounded;
 	bool bIsSprint;
 	bool bHasWeapon=false;
+	bool bLeftHandIsFull;
 
 //For private funcs	
 private:

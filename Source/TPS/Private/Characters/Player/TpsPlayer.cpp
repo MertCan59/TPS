@@ -11,13 +11,12 @@
 #include "Characters/Player/Movement/Jump.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Items/Weapon/Flashlight.h"
 #include "Items/Weapon/WeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
-// Sets default values
 ATpsPlayer::ATpsPlayer()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	
 	PlayerRootComponent=CreateDefaultSubobject<USceneComponent>(TEXT("PlayerRootComponent"));
@@ -51,14 +50,12 @@ void ATpsPlayer::PostInitProperties()
 	CameraBoom->SocketOffset=FVector(0.0f,CameraYOffset,CameraHeight);
 }
 
-// Called when the game starts or when spawned
 void ATpsPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	PlayerCapsule->OnComponentBeginOverlap.AddDynamic(this,&ATpsPlayer::OnSphereOverlap);
 }
 
-// Called every frame
 void ATpsPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -107,16 +104,24 @@ void ATpsPlayer::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AWeaponBase* OverlappingWeapon=Cast<AWeaponBase>(OtherActor);
-	if( OverlappingWeapon )
+	if(OverlappingWeapon)
 	{
-		OverlappingWeapon->Equip(GetMesh(),FName("RightHandSocket"),this,this);
+		if (OverlappingWeapon->IsA<AFlashlight>())
+		{
+			OverlappingWeapon->Equip(GetMesh(),FName("LeftHandSocket"),this,this);
+			bLeftHandIsFull=true;
+		}else
+		{
+			OverlappingWeapon->Equip(GetMesh(),FName("RightHandSocket"),this,this);
+			bHasWeapon=true;	
+		}
 		OverlappingWeapon->SetOwner(this);
 		OverlappingWeapon->SetInstigator(this);
 		EquippedWeapon = OverlappingWeapon;
-		bHasWeapon=true;
-		CharacterIdleState=ECharacterIdleState::ECS_Equipped;
+		CharacterIdleState=ECharacterIdleState::ECS_OneHandedEquipped;
 		EquippedWeapon->GetWeaponOverlapSphere()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		EquippedWeapon->GetWeaponOverlapSphere()->SetCollisionResponseToAllChannels(ECR_Ignore);
+		EquippedWeapons.AddUnique(EquippedWeapon);
 		OverlappingWeapon = nullptr;
 	}
 }
