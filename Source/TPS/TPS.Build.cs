@@ -14,7 +14,8 @@ public class TPS : ModuleRules
 				"CoreUObject",
 				"Engine", 
 				"InputCore",
-				"EnhancedInput"
+				"EnhancedInput",
+				"Niagara"
 			}
 		);
 

@@ -30,6 +30,7 @@ public:
 	//**GET SPEED FUNCTIONS **//
 	float GetMaxSpeed() const{return MaxSpeed;}
 	float GetCurrentSpeed() const{return CurrentSpeed;}
+
 	float GetCachedSpeed() const{return CachedSpeed;}
 	float GetMaxAcceleration() const{return MaxAcceleration;}
 	float GetMaxDeceleration() const{return MaxDeceleration;}
@@ -39,6 +40,8 @@ public:
 	
 	//**GET LOOK FUNCTIONS **//
 	float GetCameraSpeed() const{return CameraSpeed;}
+	float GetYawAimOffset() const{return YawAimOffset;}
+	float GetPitchAimOffset() const{return PitchAimOffset;}
 	
 private:
 
@@ -69,8 +72,12 @@ private:
 	FRotator CachedArmSpringRotation;
 	FRotator CachedPawnRotation;
 
+	float YawAimOffset;
+	float PitchAimOffset;
+
 //For private funcs
 private:
 	bool CanMove()const;
 	bool IsYawRestricted()const;
+	
 };

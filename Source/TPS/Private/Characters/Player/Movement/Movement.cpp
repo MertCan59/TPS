@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TPS/Public/Characters/Player/Movement/Movement.h"
+
+#include <string>
+
 #include "InputActionValue.h"
 #include "Characters/Player/TpsPlayer.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -66,24 +69,32 @@ void UMovement::Move(const FInputActionValue& Value)
 void UMovement::Look(const FInputActionValue& Value)
 {
 	const auto LookAxis = Value.Get<FVector2D>();
-
+	
+	
 	if (OwningCharacter->GetCharacterState()==ECharacterState::ECS_JumpingState)return;
 	if (OwningCharacter && OwningCharacter->Controller)
 	{
 		
 		if (OwningCharacter->GetCharacterState()!=ECharacterState::ECS_MovementState)
 		{
+			
+			//TODO:
+			
 			OwningCharacter->GetArmSpring()->bUsePawnControlRotation=false;
 			FRotator Current = OwningCharacter->GetArmSpring()->GetRelativeRotation();
 			FRotator TargetRotation=Current;
 			
 			if (LookAxis.X!=0 && !IsYawRestricted())
 			{
-				TargetRotation.Yaw += LookAxis.X;
+				TargetRotation.Yaw = FMath::Clamp(TargetRotation.Yaw + LookAxis.X, -50.0f, 50.0f);;
+				YawAimOffset =FMath::Clamp(YawAimOffset + LookAxis.X, -101.0f, 101.0f);
+
 			}
 			if (LookAxis.Y != 0 )
 			{
-				TargetRotation.Pitch = FMath::Clamp(TargetRotation.Pitch + LookAxis.Y, -89.0f, 89.0f); 
+				TargetRotation.Pitch = FMath::Clamp(TargetRotation.Pitch + LookAxis.Y, -50.0f, 50.0f);
+				PitchAimOffset=FMath::Clamp(PitchAimOffset + LookAxis.Y, -101.0f, 101.0f);
+				
 			}
 			FRotator SmoothRotation=UKismetMathLibrary::RInterpTo(
 				Current,
@@ -94,6 +105,8 @@ void UMovement::Look(const FInputActionValue& Value)
 			OwningCharacter->GetArmSpring()->SetRelativeRotation(SmoothRotation);
 		}else
 		{
+			YawAimOffset=0.f;
+			PitchAimOffset=0.f;
 			FRotator SmoothArmSpringRotation=UKismetMathLibrary::RInterpTo(
 				OwningCharacter->GetArmSpring()->GetRelativeRotation(),
 				CachedArmSpringRotation,
@@ -111,7 +124,7 @@ void UMovement::Look(const FInputActionValue& Value)
 		
 			if (LookAxis.Y != 0 )
 			{
-				TargetRotation.Pitch = FMath::Clamp(TargetRotation.Pitch + LookAxis.Y, -89.0f, 89.0f); 
+				TargetRotation.Pitch = FMath::Clamp(TargetRotation.Pitch + LookAxis.Y, -89.0f, 89.0f);
 			}
 			FRotator SmoothedRotation = UKismetMathLibrary::RInterpTo(CurrentRotation, TargetRotation, GetWorld()->GetDeltaSeconds(), GetCameraSpeed());
 			OwningCharacter->GetController()->SetControlRotation(SmoothedRotation);
