@@ -18,10 +18,11 @@ class TPS_API APlayerDefaultController : public APlayerController
 {
 	GENERATED_BODY()
 
-
 public:
+	APlayerDefaultController();
 	FORCEINLINE UInputAction* GetMovementAction()const{return MovementAction;}
 	FORCEINLINE UInputAction* GetLookAction()const{return LookAction;}
+	FORCEINLINE UInputAction* GetAimAction() const{return AimAction;}
 	FORCEINLINE UInputAction* GetJumpAction()const{return JumpAction;}
 	FORCEINLINE UInputAction* GetRunningAction()const{return RunningAction;}
 
@@ -40,8 +41,12 @@ private:
 	UInputAction* LookAction;
 
 	UPROPERTY(EditAnywhere,Category="Input")
+	UInputAction* AimAction;
+	
+	UPROPERTY(EditAnywhere,Category="Input")
 	UInputAction* JumpAction;
 
 	UPROPERTY(EditAnywhere,Category="Input")
 	UInputAction* RunningAction;
+	
 };

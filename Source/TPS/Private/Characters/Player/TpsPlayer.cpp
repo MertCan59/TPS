@@ -2,7 +2,6 @@
 
 #include "TPS/Public/Characters/Player/TpsPlayer.h"
 #include "EnhancedInputComponent.h"
-#include "Animations/PlayerAnimations/PlayerAnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -82,10 +81,20 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	APlayerDefaultController* NewController = Cast<APlayerDefaultController>(GetController());
 	UMovement* Movement = Cast<UMovement>(MovementController);
 	UJump* Jump=Cast<UJump>(JumpController);
-	
+	AWeaponBase* Weapon=Cast<AWeaponBase>(EquippedWeapon);
+
+	if (!Weapon)
+	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1,.25f,FColor::Magenta,"Nbr hci");
+		}
+	}
+
 	checkf(NewController,TEXT("Controller has not been set"));
 	checkf(Movement,TEXT("Movement controller has not been found"));
 	checkf(Jump,TEXT("Jump controller has not been found"));
+	
 	
 	if (UEnhancedInputComponent* EnhancedInputComponent=CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
@@ -94,6 +103,7 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		EnhancedInputComponent->BindAction(NewController->GetRunningAction(),ETriggerEvent::Completed,Movement,&UMovement::SprintStop);
 		
 		EnhancedInputComponent->BindAction(NewController->GetLookAction(),ETriggerEvent::Triggered,Movement,&UMovement::Look);
+		EnhancedInputComponent->BindAction(NewController->GetAimAction(),ETriggerEvent::Triggered,Weapon,&AWeaponBase::TakeAim);
 		
 		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::PlayMontage);
 		//EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Completed,Jump,&UJump::StopJump);
@@ -123,5 +133,21 @@ void ATpsPlayer::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 		EquippedWeapon->GetWeaponOverlapSphere()->SetCollisionResponseToAllChannels(ECR_Ignore);
 		EquippedWeapons.AddUnique(EquippedWeapon);
 		OverlappingWeapon = nullptr;
+		UpdateWeaponInputBinding();
+	}
+}
+void ATpsPlayer::UpdateWeaponInputBinding()
+{
+	if (!EquippedWeapon || !InputComponent) return;
+
+	if (bHasWeapon)
+	{
+		APlayerDefaultController* NewController = Cast<APlayerDefaultController>(GetController());
+		if (!NewController) return;
+
+		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
+		{
+			EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Triggered, EquippedWeapon, &AWeaponBase::TakeAim);
+		}
 	}
 }

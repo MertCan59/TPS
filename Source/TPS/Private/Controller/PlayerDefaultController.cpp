@@ -4,6 +4,11 @@
 #include "EnhancedInputSubsystems.h"
 
 
+APlayerDefaultController::APlayerDefaultController()
+{
+	PrimaryActorTick.bCanEverTick = true;
+}
+
 void APlayerDefaultController::BeginPlay()
 {
 	Super::BeginPlay();

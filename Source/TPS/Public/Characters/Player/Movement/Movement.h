@@ -75,9 +75,8 @@ private:
 	float YawAimOffset;
 	float PitchAimOffset;
 
-//For private funcs
+//For funcs
 private:
 	bool CanMove()const;
 	bool IsYawRestricted()const;
-	
 };

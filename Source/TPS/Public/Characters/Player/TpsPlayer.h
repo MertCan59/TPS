@@ -10,6 +10,7 @@
 #include "TpsPlayer.generated.h"
 
 
+class AHandgun;
 class UPlayerAnimInstance;
 class USceneComponent;
 class USpringArmComponent;
@@ -92,13 +93,14 @@ private:
 	
 	UPROPERTY(VisibleAnywhere,Category="Camera")
 	UCameraComponent* ViewCamera;
-
+	
 	UPROPERTY(VisibleAnywhere,Category="Weapon")
 	AWeaponBase* EquippedWeapon;
 
 	UPROPERTY(VisibleAnywhere,Category="Weapon | Attached Weapons")
 	TArray<AWeaponBase*> EquippedWeapons;
 	
+
 //For polishing variables such as length, height
 private:
 	UPROPERTY(EditAnywhere,Category="Camera Properties")
@@ -118,4 +120,5 @@ private:
 
 //For private funcs	
 private:
+	void UpdateWeaponInputBinding();
 };
