@@ -51,8 +51,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE AWeaponBase* GetWeaponBase()const{return EquippedWeapon;}
 	
-	
 	FORCEINLINE USpringArmComponent* GetArmSpring() const{return CameraBoom;}
+	FORCEINLINE UCameraComponent* GetViewCamera() const{return ViewCamera;}
+	
 	FORCEINLINE UJump* GetJump()const {return JumpController;}
 	FORCEINLINE UCapsuleComponent* GetPlayerCapsule()const {return PlayerCapsule;}
 	
@@ -100,7 +101,6 @@ private:
 	UPROPERTY(VisibleAnywhere,Category="Weapon | Attached Weapons")
 	TArray<AWeaponBase*> EquippedWeapons;
 	
-
 //For polishing variables such as length, height
 private:
 	UPROPERTY(EditAnywhere,Category="Camera Properties")

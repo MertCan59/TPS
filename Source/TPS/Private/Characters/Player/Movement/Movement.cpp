@@ -19,6 +19,9 @@ UMovement::UMovement()
 void UMovement::BeginPlay()
 {
 	Super::BeginPlay();
+	YawAimOffset=0.f;
+	PitchAimOffset=0.f;
+	
 	CachedSpeed=CurrentSpeed;
 	CachedArmSpringRotation=OwningCharacter->GetArmSpring()->GetRelativeRotation();
 	CachedPawnRotation=OwningCharacter->GetController()->GetControlRotation();
@@ -27,6 +30,7 @@ void UMovement::BeginPlay()
 		MovementComponent->MaxAcceleration=MovementDerived->GetMaxAcceleration();
 		MovementComponent->BrakingDecelerationWalking=MovementDerived->GetMaxDeceleration();
 	}
+	
 }
 
 void UMovement::Move(const FInputActionValue& Value)
@@ -73,15 +77,13 @@ void UMovement::Look(const FInputActionValue& Value)
 		
 		if (OwningCharacter->GetCharacterState()!=ECharacterState::ECS_MovementState)
 		{
-			
-			//TODO:
 			OwningCharacter->GetArmSpring()->bUsePawnControlRotation=false;
 			FRotator Current = OwningCharacter->GetArmSpring()->GetRelativeRotation();
 			FRotator TargetRotation=Current;
 			
 			if (LookAxis.X!=0 && !IsYawRestricted())
 			{
-				TargetRotation.Yaw = FMath::Clamp(TargetRotation.Yaw + LookAxis.X, -50.0f, 50.0f);;
+				TargetRotation.Yaw = FMath::Clamp(TargetRotation.Yaw + LookAxis.X, -50.0f, 50.0f);
 				YawAimOffset =FMath::Clamp(YawAimOffset + LookAxis.X, -101.0f, 101.0f);
 
 			}

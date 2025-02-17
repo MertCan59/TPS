@@ -35,8 +35,12 @@ public:
 	float GetMaxAcceleration() const{return MaxAcceleration;}
 	float GetMaxDeceleration() const{return MaxDeceleration;}
 	FVector2D GetCurrentVelocity() const{return  CachedInput;}
+	
 	//**SET SPEED FUNCTIONS **//
 	void SetCurrentSpeed(float NewSpeed) {CurrentSpeed=NewSpeed;}
+
+	//**SET CAMERA FUNCTIONS **//
+	void SetCameraSpeed(float NewCameraSpeed){CameraSpeed=NewCameraSpeed;}
 	
 	//**GET LOOK FUNCTIONS **//
 	float GetCameraSpeed() const{return CameraSpeed;}

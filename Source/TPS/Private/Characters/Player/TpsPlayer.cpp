@@ -39,7 +39,6 @@ ATpsPlayer::ATpsPlayer()
 void ATpsPlayer::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
-	
 }
 
 void ATpsPlayer::PostInitProperties()
@@ -83,14 +82,6 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	UJump* Jump=Cast<UJump>(JumpController);
 	AWeaponBase* Weapon=Cast<AWeaponBase>(EquippedWeapon);
 
-	if (!Weapon)
-	{
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(-1,.25f,FColor::Magenta,"Nbr hci");
-		}
-	}
-
 	checkf(NewController,TEXT("Controller has not been set"));
 	checkf(Movement,TEXT("Movement controller has not been found"));
 	checkf(Jump,TEXT("Jump controller has not been found"));
@@ -103,7 +94,9 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		EnhancedInputComponent->BindAction(NewController->GetRunningAction(),ETriggerEvent::Completed,Movement,&UMovement::SprintStop);
 		
 		EnhancedInputComponent->BindAction(NewController->GetLookAction(),ETriggerEvent::Triggered,Movement,&UMovement::Look);
+		
 		EnhancedInputComponent->BindAction(NewController->GetAimAction(),ETriggerEvent::Triggered,Weapon,&AWeaponBase::TakeAim);
+		//EnhancedInputComponent->BindAction(NewController->GetAimAction(),ETriggerEvent::Triggered,Weapon,&AWeaponBase::CancelAim);
 		
 		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::PlayMontage);
 		//EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Completed,Jump,&UJump::StopJump);
@@ -116,7 +109,7 @@ void ATpsPlayer::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	AWeaponBase* OverlappingWeapon=Cast<AWeaponBase>(OtherActor);
 	if(OverlappingWeapon)
 	{
-		if (OverlappingWeapon->IsA<AFlashlight>())
+		if (OverlappingWeapon->IsA<AFlashlight>() && !bLeftHandIsFull)
 		{
 			OverlappingWeapon->Equip(GetMesh(),FName("LeftHandSocket"),this,this);
 			bLeftHandIsFull=true;
@@ -148,6 +141,7 @@ void ATpsPlayer::UpdateWeaponInputBinding()
 		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 		{
 			EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Triggered, EquippedWeapon, &AWeaponBase::TakeAim);
+			EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Completed, EquippedWeapon, &AWeaponBase::CancelAim);
 		}
 	}
 }
