@@ -32,7 +32,7 @@ ATpsPlayer::ATpsPlayer()
 	ViewCamera->SetupAttachment(CameraBoom);
 
 	MovementController=CreateDefaultSubobject<UMovement>(TEXT("MovementController"));
-	
+		
 	JumpController=CreateDefaultSubobject<UJump>(TEXT("JumpController"));
 	
 }
@@ -95,7 +95,7 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		
 		EnhancedInputComponent->BindAction(NewController->GetLookAction(),ETriggerEvent::Triggered,Movement,&UMovement::Look);
 		
-		EnhancedInputComponent->BindAction(NewController->GetAimAction(),ETriggerEvent::Triggered,Weapon,&AWeaponBase::TakeAim);
+		//EnhancedInputComponent->BindAction(NewController->GetAimAction(),ETriggerEvent::Triggered,Weapon,&AWeaponBase::TakeAim);
 		//EnhancedInputComponent->BindAction(NewController->GetAimAction(),ETriggerEvent::Triggered,Weapon,&AWeaponBase::CancelAim);
 		
 		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::PlayMontage);

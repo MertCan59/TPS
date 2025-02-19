@@ -84,13 +84,13 @@ void UMovement::Look(const FInputActionValue& Value)
 			if (LookAxis.X!=0 && !IsYawRestricted())
 			{
 				TargetRotation.Yaw = FMath::Clamp(TargetRotation.Yaw + LookAxis.X, -50.0f, 50.0f);
-				YawAimOffset =FMath::Clamp(YawAimOffset + LookAxis.X, -101.0f, 101.0f);
+				YawAimOffset =FMath::Clamp(YawAimOffset + LookAxis.X, -100.0f, 100.0f);
 
 			}
 			if (LookAxis.Y != 0 )
 			{
 				TargetRotation.Pitch = FMath::Clamp(TargetRotation.Pitch + LookAxis.Y, -50.0f, 50.0f);
-				PitchAimOffset=FMath::Clamp(PitchAimOffset + LookAxis.Y, -101.0f, 101.0f);
+				PitchAimOffset=FMath::Clamp(PitchAimOffset + LookAxis.Y, -90.0f, 90.0f);
 			}
 			FRotator SmoothRotation=UKismetMathLibrary::RInterpTo(
 				Current,
@@ -98,6 +98,18 @@ void UMovement::Look(const FInputActionValue& Value)
 				GetWorld()->GetDeltaSeconds(),
 				GetCameraSpeed()
 				);
+			PitchAimOffset=UKismetMathLibrary::Lerp
+			(
+				PitchAimOffset,
+				PitchAimOffset,
+				GetCameraSpeed()*100.f
+			);
+			YawAimOffset=UKismetMathLibrary::Lerp
+			(
+				YawAimOffset,
+				YawAimOffset,
+				GetCameraSpeed()*100.f
+			);
 			OwningCharacter->GetArmSpring()->SetRelativeRotation(SmoothRotation);
 		}else
 		{
