@@ -86,7 +86,6 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	checkf(Movement,TEXT("Movement controller has not been found"));
 	checkf(Jump,TEXT("Jump controller has not been found"));
 	
-	
 	if (UEnhancedInputComponent* EnhancedInputComponent=CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(NewController->GetMovementAction(),ETriggerEvent::Triggered,Movement,&UMovement::Move);
@@ -94,9 +93,6 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		EnhancedInputComponent->BindAction(NewController->GetRunningAction(),ETriggerEvent::Completed,Movement,&UMovement::SprintStop);
 		
 		EnhancedInputComponent->BindAction(NewController->GetLookAction(),ETriggerEvent::Triggered,Movement,&UMovement::Look);
-		
-		//EnhancedInputComponent->BindAction(NewController->GetAimAction(),ETriggerEvent::Triggered,Weapon,&AWeaponBase::TakeAim);
-		//EnhancedInputComponent->BindAction(NewController->GetAimAction(),ETriggerEvent::Triggered,Weapon,&AWeaponBase::CancelAim);
 		
 		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::PlayMontage);
 		//EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Completed,Jump,&UJump::StopJump);
@@ -142,6 +138,14 @@ void ATpsPlayer::UpdateWeaponInputBinding()
 		{
 			EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Triggered, EquippedWeapon, &AWeaponBase::TakeAim);
 			EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Completed, EquippedWeapon, &AWeaponBase::CancelAim);
+			EnhancedInputComponent->BindAction(NewController->GetShootingAction(),ETriggerEvent::Triggered,EquippedWeapon,&AWeaponBase::Shoot);
 		}
 	}
+}
+
+void ATpsPlayer::UpdateInterval(APlayerDefaultController* CurrentController)
+{
+	if (!CurrentController) return;
+
+	
 }

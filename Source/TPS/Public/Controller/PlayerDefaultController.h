@@ -23,6 +23,7 @@ public:
 	FORCEINLINE UInputAction* GetMovementAction()const{return MovementAction;}
 	FORCEINLINE UInputAction* GetLookAction()const{return LookAction;}
 	FORCEINLINE UInputAction* GetAimAction() const{return AimAction;}
+	FORCEINLINE UInputAction* GetShootingAction() const{return ShootingAction;}
 	FORCEINLINE UInputAction* GetJumpAction()const{return JumpAction;}
 	FORCEINLINE UInputAction* GetRunningAction()const{return RunningAction;}
 
@@ -42,11 +43,13 @@ private:
 
 	UPROPERTY(EditAnywhere,Category="Input")
 	UInputAction* AimAction;
+
+	UPROPERTY(EditAnywhere,Category="Input")
+	UInputAction* ShootingAction;
 	
 	UPROPERTY(EditAnywhere,Category="Input")
 	UInputAction* JumpAction;
 
 	UPROPERTY(EditAnywhere,Category="Input")
 	UInputAction* RunningAction;
-	
 };

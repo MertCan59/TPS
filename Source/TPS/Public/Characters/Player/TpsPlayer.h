@@ -6,7 +6,6 @@
 #include "PlayerMovementState.h"
 #include "GameFramework/Character.h"
 #include "TPS/Public/Controller/PlayerDefaultController.h"
-
 #include "TpsPlayer.generated.h"
 
 
@@ -121,4 +120,5 @@ private:
 //For private funcs	
 private:
 	void UpdateWeaponInputBinding();
+	void UpdateInterval(APlayerDefaultController* Controller);
 };
