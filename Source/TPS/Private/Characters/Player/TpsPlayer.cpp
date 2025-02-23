@@ -14,6 +14,7 @@
 #include "Items/Weapon/WeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
+
 ATpsPlayer::ATpsPlayer()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -34,6 +35,8 @@ ATpsPlayer::ATpsPlayer()
 	MovementController=CreateDefaultSubobject<UMovement>(TEXT("MovementController"));
 		
 	JumpController=CreateDefaultSubobject<UJump>(TEXT("JumpController"));
+
+	
 	
 }
 void ATpsPlayer::OnConstruction(const FTransform& Transform)
@@ -94,6 +97,8 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		
 		EnhancedInputComponent->BindAction(NewController->GetLookAction(),ETriggerEvent::Triggered,Movement,&UMovement::Look);
 		
+		//EnhancedInputComponent->BindAction(NewController->GetShootingAction(),ETriggerEvent::Triggered,Weapon,&AWeaponBase::Shoot);
+		
 		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::PlayMontage);
 		//EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Completed,Jump,&UJump::StopJump);
 	}
@@ -143,9 +148,8 @@ void ATpsPlayer::UpdateWeaponInputBinding()
 	}
 }
 
-void ATpsPlayer::UpdateInterval(APlayerDefaultController* CurrentController)
+void ATpsPlayer::UpdateInterval()
 {
-	if (!CurrentController) return;
-
 	
+
 }

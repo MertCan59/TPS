@@ -99,6 +99,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere,Category="Weapon | Attached Weapons")
 	TArray<AWeaponBase*> EquippedWeapons;
+
+
 	
 //For polishing variables such as length, height
 private:
@@ -120,5 +122,5 @@ private:
 //For private funcs	
 private:
 	void UpdateWeaponInputBinding();
-	void UpdateInterval(APlayerDefaultController* Controller);
+	void UpdateInterval();
 };
