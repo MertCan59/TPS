@@ -12,11 +12,12 @@ APlayerDefaultController::APlayerDefaultController()
 void APlayerDefaultController::BeginPlay()
 {
 	Super::BeginPlay();
+	PlayerSubsystem=ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(this->GetLocalPlayer());
 	if (this)
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem=ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(this->GetLocalPlayer()))
+		if (PlayerSubsystem)
 		{
-			Subsystem->AddMappingContext(PlayerInputContext,0);
+			PlayerSubsystem->AddMappingContext(PlayerInputContext,0);
 		}
 	}
 }

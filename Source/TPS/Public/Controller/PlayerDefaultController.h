@@ -11,6 +11,7 @@
  */
 
 class UInputMappingContext;
+class UEnhancedInputLocalPlayerSubsystem;
 class UInputAction;
 
 UCLASS()
@@ -20,6 +21,8 @@ class TPS_API APlayerDefaultController : public APlayerController
 
 public:
 	APlayerDefaultController();
+	FORCEINLINE UInputMappingContext* GetPlayerInputContext()const{return PlayerInputContext;}
+	FORCEINLINE UEnhancedInputLocalPlayerSubsystem* GetPlayerSubsystem()const{return PlayerSubsystem;}
 	FORCEINLINE UInputAction* GetMovementAction()const{return MovementAction;}
 	FORCEINLINE UInputAction* GetLookAction()const{return LookAction;}
 	FORCEINLINE UInputAction* GetAimAction() const{return AimAction;}
@@ -34,6 +37,8 @@ private:
 
 	UPROPERTY(EditAnywhere,Category="Input")
 	UInputMappingContext* PlayerInputContext;
+	
+	UEnhancedInputLocalPlayerSubsystem* PlayerSubsystem;
 
 	UPROPERTY(EditAnywhere,Category="Input")
 	UInputAction* MovementAction;

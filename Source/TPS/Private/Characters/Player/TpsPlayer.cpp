@@ -145,6 +145,7 @@ void ATpsPlayer::UpdateWeaponInputBinding()
 			EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Completed, EquippedWeapon, &AWeaponBase::CancelAim);
 			EnhancedInputComponent->BindAction(NewController->GetShootingAction(),ETriggerEvent::Triggered,EquippedWeapon,&AWeaponBase::Shoot);
 		}
+		
 	}
 }
 

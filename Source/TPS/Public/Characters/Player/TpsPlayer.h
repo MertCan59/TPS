@@ -8,7 +8,6 @@
 #include "TPS/Public/Controller/PlayerDefaultController.h"
 #include "TpsPlayer.generated.h"
 
-
 class AHandgun;
 class UPlayerAnimInstance;
 class USceneComponent;
@@ -99,8 +98,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere,Category="Weapon | Attached Weapons")
 	TArray<AWeaponBase*> EquippedWeapons;
-
-
 	
 //For polishing variables such as length, height
 private:
