@@ -35,8 +35,6 @@ ATpsPlayer::ATpsPlayer()
 	MovementController=CreateDefaultSubobject<UMovement>(TEXT("MovementController"));
 		
 	JumpController=CreateDefaultSubobject<UJump>(TEXT("JumpController"));
-
-	
 	
 }
 void ATpsPlayer::OnConstruction(const FTransform& Transform)
@@ -145,12 +143,8 @@ void ATpsPlayer::UpdateWeaponInputBinding()
 			EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Completed, EquippedWeapon, &AWeaponBase::CancelAim);
 			EnhancedInputComponent->BindAction(NewController->GetShootingAction(),ETriggerEvent::Triggered,EquippedWeapon,&AWeaponBase::Shoot);
 		}
-		
 	}
 }
 
 void ATpsPlayer::UpdateInterval()
-{
-	
-
-}
+{}
