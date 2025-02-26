@@ -49,17 +49,6 @@ void ATpsPlayer::PostInitProperties()
 	CameraBoom->SocketOffset=FVector(0.0f,CameraYOffset,CameraHeight);
 }
 
-
-void ATpsPlayer::ReceiveDamage_Implementation()
-{
-	IDamageable::ReceiveDamage_Implementation();
-	//TODO:: WILL BE DELETED -->
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, .25f, FColor::Red, "Damageable working");
-	}
-}
-
 void ATpsPlayer::BeginPlay()
 {
 	Super::BeginPlay();

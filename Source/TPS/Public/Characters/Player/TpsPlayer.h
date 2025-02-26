@@ -21,7 +21,7 @@ class UJump;
 class AWeaponBase;
 
 UCLASS()
-class TPS_API ATpsPlayer : public ACharacter,public IDamageable
+class TPS_API ATpsPlayer : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -59,7 +59,7 @@ public:
 	//** PLAYER Jog CONTROLLER  **/
 	UMovement* GetMovement() const{return MovementController;}
 
-	void ReceiveDamage_Implementation() override;
+	
 	
 protected:
 	virtual void BeginPlay() override;
