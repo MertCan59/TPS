@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "PlayerMovementState.h"
 #include "GameFramework/Character.h"
+#include "Interface/Damageable.h"
 #include "TPS/Public/Controller/PlayerDefaultController.h"
 #include "TpsPlayer.generated.h"
 
@@ -20,7 +21,7 @@ class UJump;
 class AWeaponBase;
 
 UCLASS()
-class TPS_API ATpsPlayer : public ACharacter
+class TPS_API ATpsPlayer : public ACharacter,public IDamageable
 {
 	GENERATED_BODY()
 
@@ -57,6 +58,8 @@ public:
 	
 	//** PLAYER Jog CONTROLLER  **/
 	UMovement* GetMovement() const{return MovementController;}
+
+	void ReceiveDamage_Implementation() override;
 	
 protected:
 	virtual void BeginPlay() override;
