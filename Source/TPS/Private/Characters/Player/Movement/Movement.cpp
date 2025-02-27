@@ -5,6 +5,9 @@
 #include "Characters/Player/TpsPlayer.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+
+#include "Items/Projectiles/ProjectileBase.h"
+
 #include "Kismet/KismetMathLibrary.h"
 
 UMovement::UMovement()
@@ -30,7 +33,6 @@ void UMovement::BeginPlay()
 		MovementComponent->MaxAcceleration=MovementDerived->GetMaxAcceleration();
 		MovementComponent->BrakingDecelerationWalking=MovementDerived->GetMaxDeceleration();
 	}
-	
 }
 
 void UMovement::Move(const FInputActionValue& Value)
@@ -148,6 +150,7 @@ void UMovement::SprintStart(const FInputActionValue& Value)
 void UMovement::SprintStop(const FInputActionValue& Value)
 {
 	OwningCharacter->SetCharacterSprinting(false);
+	OwningCharacter->SetCharacterState(ECharacterState::ECS_Idle);
 	SetCurrentSpeed(GetCachedSpeed());
 }
 

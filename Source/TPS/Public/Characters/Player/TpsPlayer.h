@@ -59,8 +59,7 @@ public:
 	//** PLAYER Jog CONTROLLER  **/
 	UMovement* GetMovement() const{return MovementController;}
 
-	
-	
+
 protected:
 	virtual void BeginPlay() override;
 	

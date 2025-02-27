@@ -14,7 +14,6 @@
 #include "Items/Weapon/WeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
-
 ATpsPlayer::ATpsPlayer()
 {
 	PrimaryActorTick.bCanEverTick = false;
