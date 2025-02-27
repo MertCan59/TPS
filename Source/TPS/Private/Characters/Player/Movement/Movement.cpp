@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 
 #include "Items/Projectiles/ProjectileBase.h"
+#include "Items/Weapon/Handgun.h"
 
 #include "Kismet/KismetMathLibrary.h"
 
@@ -144,19 +145,36 @@ void UMovement::Look(const FInputActionValue& Value)
 void UMovement::SprintStart(const FInputActionValue& Value)
 {
 	OwningCharacter->SetCharacterSprinting(true);
+
+	//TODO:: Will be cast to Weapon Base later. I hope, I don't forget :) Yeah I didn't 
+	if (AWeaponBase* WeaponBase=Cast<AWeaponBase>(OwningCharacter->GetWeaponBase()))
+	{
+		if (!IsMoving())
+		{
+			WeaponBase->SetCanFire(false);
+		}
+	}
 	SetCurrentSpeed(GetCachedSpeed() * SprintModifier);
 }
 
 void UMovement::SprintStop(const FInputActionValue& Value)
 {
 	OwningCharacter->SetCharacterSprinting(false);
-	OwningCharacter->SetCharacterState(ECharacterState::ECS_Idle);
+	if (AWeaponBase* WeaponBase=Cast<AWeaponBase>(OwningCharacter->GetWeaponBase()))
+	{
+		WeaponBase->SetCanFire(true);
+	}
 	SetCurrentSpeed(GetCachedSpeed());
 }
 
 bool UMovement::CanMove() const
 {
 	return OwningCharacter->GetCharacterState()==ECharacterState::ECS_Idle || OwningCharacter->GetCharacterState()==ECharacterState::ECS_MovementState;
+}
+
+bool UMovement::IsMoving() const
+{
+	return OwningCharacter->GetVelocity().IsNearlyZero();
 }
 
 bool UMovement::IsYawRestricted() const
