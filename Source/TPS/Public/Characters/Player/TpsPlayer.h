@@ -46,6 +46,7 @@ public:
 	FORCEINLINE bool GetCharacterGrounded() const{return bIsGrounded;}
 	FORCEINLINE bool GetCharacterSprint() const{return bIsSprint;}
 	FORCEINLINE bool GetHasWeapon() const{return bHasWeapon;}
+	FORCEINLINE bool GetIsEquippedWeaponHandgun()const {return bIsEquippedWeaponHandgun;}
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE AWeaponBase* GetWeaponBase()const{return EquippedWeapon;}
@@ -116,10 +117,11 @@ private:
 	bool bIsGrounded;
 	bool bIsSprint;
 	bool bHasWeapon=false;
+	bool bIsEquippedWeaponHandgun;
+	bool bIsEquippedWeaponAssaultRifle;
 	bool bLeftHandIsFull;
 
 //For private funcs	
 private:
 	void UpdateWeaponInputBinding();
-	void UpdateInterval();
 };

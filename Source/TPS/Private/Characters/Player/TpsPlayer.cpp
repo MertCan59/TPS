@@ -10,7 +10,6 @@
 #include "Characters/Player/Movement/Jump.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Items/Weapon/Flashlight.h"
 #include "Items/Weapon/WeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -107,19 +106,44 @@ void ATpsPlayer::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	AWeaponBase* OverlappingWeapon=Cast<AWeaponBase>(OtherActor);
 	if(OverlappingWeapon)
 	{
-		if (OverlappingWeapon->IsA<AFlashlight>() && !bLeftHandIsFull)
+		EWeaponType Type=OverlappingWeapon->GetWeaponType();
+		switch(Type)
 		{
+		case EWeaponType::Flashlight:
 			OverlappingWeapon->Equip(GetMesh(),FName("LeftHandSocket"),this,this);
+			CharacterIdleState=ECharacterIdleState::ECS_OneHandedEquipped;
 			bLeftHandIsFull=true;
-		}else
-		{
-			OverlappingWeapon->Equip(GetMesh(),FName("RightHandSocket"),this,this);
-			bHasWeapon=true;	
+			OverlappingWeapon->SetOwner(this);
+			OverlappingWeapon->SetInstigator(this);
+			break;
+		case EWeaponType::Handgun:
+			if (!bHasWeapon)
+			{
+				OverlappingWeapon->Equip(GetMesh(),FName("RightHandSocket"),this,this);
+				CharacterIdleState=ECharacterIdleState::ECS_OneHandedEquipped;
+				bHasWeapon=true;
+				bIsEquippedWeaponAssaultRifle=false;
+				bIsEquippedWeaponHandgun=true;
+				OverlappingWeapon->SetOwner(this);
+				OverlappingWeapon->SetInstigator(this);
+				break;
+			}
+			
+		case EWeaponType::AssaultRifle:
+			GEngine->AddOnScreenDebugMessage(-1,.25f,FColor::Red,"Equipped an Assault Rifle");
+			if (!bHasWeapon)
+			{
+				OverlappingWeapon->Equip(GetMesh(),FName("RightHandSocket"),this,this);
+				CharacterIdleState=ECharacterIdleState::ECS_TwoHandedEquipped;
+				bHasWeapon=true;
+				bIsEquippedWeaponAssaultRifle=true;
+				bIsEquippedWeaponHandgun=false;
+				OverlappingWeapon->SetOwner(this);
+				OverlappingWeapon->SetInstigator(this);
+				break;
+			}
 		}
-		OverlappingWeapon->SetOwner(this);
-		OverlappingWeapon->SetInstigator(this);
 		EquippedWeapon = OverlappingWeapon;
-		CharacterIdleState=ECharacterIdleState::ECS_OneHandedEquipped;
 		EquippedWeapon->GetWeaponOverlapSphere()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		EquippedWeapon->GetWeaponOverlapSphere()->SetCollisionResponseToAllChannels(ECR_Ignore);
 		EquippedWeapons.AddUnique(EquippedWeapon);
@@ -144,6 +168,3 @@ void ATpsPlayer::UpdateWeaponInputBinding()
 		}
 	}
 }
-
-void ATpsPlayer::UpdateInterval()
-{}
