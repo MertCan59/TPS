@@ -2,6 +2,7 @@
 
 #include "TPS/Public/Characters/Player/TpsPlayer.h"
 #include "EnhancedInputComponent.h"
+#include "Animations/PlayerAnimations/PlayerAnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -95,13 +96,65 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		
 		//EnhancedInputComponent->BindAction(NewController->GetShootingAction(),ETriggerEvent::Triggered,Weapon,&AWeaponBase::Shoot);
 		
+		//EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Started, this, &ATpsPlayer::PlayAnimMontage);
+		EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Triggered, this, &ATpsPlayer::StartAiming);
+		EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Completed, this, &ATpsPlayer::StopAnimMontage);
+		
 		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::PlayMontage);
 		//EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Completed,Jump,&UJump::StopJump);
 	}
 }
 
+
+void ATpsPlayer::StartAiming()
+{
+	if (EquippedWeapon)
+	{
+		bIsAiming=true;
+
+	}
+}
+
+void ATpsPlayer::PlayAnimMontage()
+{
+	if (EquippedWeapon)
+	{
+		UAnimInstance* AnimInstance=GetMesh()->GetAnimInstance();
+		UPlayerAnimInstance* PlayerAnimInstance=Cast<UPlayerAnimInstance>(AnimInstance);
+		
+		if (AnimInstance && PlayerAnimInstance && AimMontage)
+		{
+			AnimInstance->Montage_Play(AimMontage);
+			AnimInstance->Montage_JumpToSection("Aim", AimMontage);
+			if (GEngine)
+			{
+				//GEngine->AddOnScreenDebugMessage(-1, .25f, FColor::Red, "Playing AnimMontage");
+			}
+			if (GEngine)
+			{
+				FString isItTrue = PlayerAnimInstance->GetIsAiming() ? TEXT("True") : TEXT("False");
+				GEngine->AddOnScreenDebugMessage(-1,.25f,FColor::Red,isItTrue);
+			}
+			if (PlayerAnimInstance->GetIsAiming())
+			{
+				AnimInstance->Montage_Pause(AimMontage);
+			}
+			if (!bIsAiming)
+			{
+				PlayerAnimInstance->SetIsAnimAiming(false);
+			}
+		}
+	}
+}
+
+void ATpsPlayer::StopAnimMontage()
+{
+	bIsAiming=false;
+}
+
+
 void ATpsPlayer::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                 UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AWeaponBase* OverlappingWeapon=Cast<AWeaponBase>(OtherActor);
 	if(OverlappingWeapon)

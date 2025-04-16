@@ -48,6 +48,9 @@ public:
 	FORCEINLINE bool GetHasWeapon() const{return bHasWeapon;}
 	FORCEINLINE bool GetIsEquippedWeaponHandgun()const {return bIsEquippedWeaponHandgun;}
 
+	
+	FORCEINLINE bool GetIsAiming()const {return bIsAiming;}
+
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE AWeaponBase* GetWeaponBase()const{return EquippedWeapon;}
 	
@@ -101,6 +104,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere,Category="Weapon | Attached Weapons")
 	TArray<AWeaponBase*> EquippedWeapons;
+
+	UPROPERTY(EditDefaultsOnly,Category="Aim Montage")
+	UAnimMontage* AimMontage;
 	
 //For polishing variables such as length, height
 private:
@@ -113,6 +119,8 @@ private:
 	UPROPERTY(EditAnywhere,Category="Camera Properties")
 	float TargetArmLength;
 
+	bool bIsAiming;
+
 	//** GENERAL CONTROLLERS **//
 	bool bIsGrounded;
 	bool bIsSprint;
@@ -124,4 +132,7 @@ private:
 //For private funcs	
 private:
 	void UpdateWeaponInputBinding();
+	void PlayAnimMontage();
+	void StopAnimMontage();
+	void StartAiming();
 };
