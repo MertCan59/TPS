@@ -49,7 +49,8 @@ public:
 	FORCEINLINE bool GetIsEquippedWeaponHandgun()const {return bIsEquippedWeaponHandgun;}
 
 	
-	FORCEINLINE bool GetIsAiming()const {return bIsAiming;}
+	FORCEINLINE bool GetIsAiming() {return StartRifleAiming();}
+	FORCEINLINE bool GetRifleIsAiming()const {return bIsRifleAiming;}
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE AWeaponBase* GetWeaponBase()const{return EquippedWeapon;}
@@ -128,11 +129,12 @@ private:
 	bool bIsEquippedWeaponHandgun;
 	bool bIsEquippedWeaponAssaultRifle;
 	bool bLeftHandIsFull;
+	bool bIsRifleAiming;
 
 //For private funcs	
 private:
 	void UpdateWeaponInputBinding();
-	void PlayAnimMontage();
-	void StopAnimMontage();
+	void StopAiming();
 	void StartAiming();
+	bool StartRifleAiming();
 };

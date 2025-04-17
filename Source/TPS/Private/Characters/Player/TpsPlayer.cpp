@@ -98,7 +98,7 @@ void ATpsPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		
 		//EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Started, this, &ATpsPlayer::PlayAnimMontage);
 		EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Triggered, this, &ATpsPlayer::StartAiming);
-		EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Completed, this, &ATpsPlayer::StopAnimMontage);
+		EnhancedInputComponent->BindAction(NewController->GetAimAction(), ETriggerEvent::Completed, this, &ATpsPlayer::StopAiming);
 		
 		EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Started,Jump,&UJump::PlayMontage);
 		//EnhancedInputComponent->BindAction(NewController->GetJumpAction(),ETriggerEvent::Completed,Jump,&UJump::StopJump);
@@ -111,47 +111,18 @@ void ATpsPlayer::StartAiming()
 	if (EquippedWeapon)
 	{
 		bIsAiming=true;
-
 	}
 }
 
-void ATpsPlayer::PlayAnimMontage()
+bool ATpsPlayer::StartRifleAiming()
 {
-	if (EquippedWeapon)
-	{
-		UAnimInstance* AnimInstance=GetMesh()->GetAnimInstance();
-		UPlayerAnimInstance* PlayerAnimInstance=Cast<UPlayerAnimInstance>(AnimInstance);
-		
-		if (AnimInstance && PlayerAnimInstance && AimMontage)
-		{
-			AnimInstance->Montage_Play(AimMontage);
-			AnimInstance->Montage_JumpToSection("Aim", AimMontage);
-			if (GEngine)
-			{
-				//GEngine->AddOnScreenDebugMessage(-1, .25f, FColor::Red, "Playing AnimMontage");
-			}
-			if (GEngine)
-			{
-				FString isItTrue = PlayerAnimInstance->GetIsAiming() ? TEXT("True") : TEXT("False");
-				GEngine->AddOnScreenDebugMessage(-1,.25f,FColor::Red,isItTrue);
-			}
-			if (PlayerAnimInstance->GetIsAiming())
-			{
-				AnimInstance->Montage_Pause(AimMontage);
-			}
-			if (!bIsAiming)
-			{
-				PlayerAnimInstance->SetIsAnimAiming(false);
-			}
-		}
-	}
+	return bIsAiming && CharacterIdleState==ECharacterIdleState::ECS_TwoHandedEquipped;
 }
 
-void ATpsPlayer::StopAnimMontage()
+void ATpsPlayer::StopAiming()
 {
 	bIsAiming=false;
 }
-
 
 void ATpsPlayer::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                  UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
